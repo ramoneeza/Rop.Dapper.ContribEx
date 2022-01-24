@@ -52,7 +52,7 @@ namespace Rop.Dapper.ContribEx
 
         // Async
 
-        public static async Task<int> InsertOrUpdateAutoKeyAsync<T>(this IDbConnection conn, T item, IDbTransaction tr = null,int? timeout=0) where T : class
+        public static async Task<int> InsertOrUpdateAutoKeyAsync<T>(this IDbConnection conn, T item, IDbTransaction tr = null,int? timeout=null) where T : class
         {
             var kd = DapperHelperExtend.GetKeyDescription(typeof(T));
             var key = (int)(DapperHelperExtend.GetKeyValue(item));
@@ -66,12 +66,12 @@ namespace Rop.Dapper.ContribEx
             }
             return key;
         }
-        public static async Task InsertOrUpdateAsync<T>(this IDbConnection conn, T item, IDbTransaction tr = null,int? timeout=0) where T : class
+        public static async Task InsertOrUpdateAsync<T>(this IDbConnection conn, T item, IDbTransaction tr = null,int? timeout=null) where T : class
         {
             var res = await conn.UpdateAsync(item, tr,timeout);
             if (!res) await conn.InsertAsync(item, tr,timeout);
         }
-        public static async Task<int> UpdateIdValuesAsync<TA, T>(this IDbConnection conn, IEnumerable<(dynamic id, T value)> values, string field, IDbTransaction tr = null,int? timeout=0)
+        public static async Task<int> UpdateIdValuesAsync<TA, T>(this IDbConnection conn, IEnumerable<(dynamic id, T value)> values, string field, IDbTransaction tr = null,int? timeout=null)
         {
             var kd = DapperHelperExtend.GetKeyDescription(typeof(TA));
             var sql = $"UPDATE {kd.TableName} SET {field}=@value WHERE {kd.KeyName}=@id";
@@ -83,7 +83,7 @@ namespace Rop.Dapper.ContribEx
             }
             return await conn.ExecuteAsync(sql, lstdyn, tr,timeout);
         }
-        public static async Task<bool> UpdateIdValueAsync<TA, T>(this IDbConnection conn, (dynamic id, T value) value, string field, IDbTransaction tr = null,int? timeout=0)
+        public static async Task<bool> UpdateIdValueAsync<TA, T>(this IDbConnection conn, (dynamic id, T value) value, string field, IDbTransaction tr = null,int? timeout=null)
         {
             var kd = DapperHelperExtend.GetKeyDescription(typeof(TA));
             var sql = $"UPDATE {kd.TableName} SET {field}=@value WHERE {kd.KeyName}=@id";
