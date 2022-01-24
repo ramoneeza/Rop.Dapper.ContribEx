@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <Title>Rop.Dapper.ContribEx</Title>
+	  <PackageTags>orm;sql;micro-orm;dapper</PackageTags>
+	  <Description>Aditional helpers for Dapper.net and Dapper.Contrib</Description>
+	  <Authors>Ramon Ordiales Plaza</Authors>
+	  <TargetFrameworks>net48;netstandard2.0;net5.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+  </ItemGroup>
+
+</Project>
