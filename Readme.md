@@ -3,10 +3,10 @@
 Features
 --------
 
-Rop.Dapper.ContribEx include a DapperHelperExtend class for access to hidden information about
-classes and his attributes
+Rop.Dapper.ContribEx includes a DapperHelperExtend class to access to hidden information about
+classes and their attributes.
 
-Rop.Dapper.ContribEx add more helper methods for inserting, getting,
+Rop.Dapper.ContribEx adds more helper methods for inserting, getting,
 updating and deleting records.
 
 ## DapperHelperExtend
@@ -29,11 +29,11 @@ string GetDeleteByKeyCache(Type type);
 The full list of helpers for class/table/key information are:
 
 ```csharp
-(PropertyInfo propkey, bool isautokey) GetSingleKey(Type t)
-KeyDescription GetKeyDescription(Type t)
-object GetKeyValue<T>(T item)
-SetKeyValue<T>(T item, object value)
-(KeyDescription keydescription, object value) GetKeyDescriptionAndValue<T>(T item)
+(PropertyInfo propkey, bool isautokey) GetSingleKey(Type t);
+KeyDescription GetKeyDescription(Type t);
+object GetKeyValue<T>(T item);
+SetKeyValue<T>(T item, object value);
+(KeyDescription keydescription, object value) GetKeyDescriptionAndValue<T>(T item);
 ```
 The full list of helpers to format list of keys are:
 
@@ -51,7 +51,7 @@ string GetMemberName<T>(this Expression<T> expression);
 
 ## ConnectionHelper
 
-The full list of extension methods in ConnectionHelper now are:
+The full list of extension methods in ConnectionHelper are:
 
 `Delete` methods
 -------
@@ -109,3 +109,5 @@ Task<bool> UpdateIdValueAsync<TA, T>(this IDbConnection conn, (dynamic id, T val
  List<T> QueryJoin<T, M>(this IDbConnection conn, string query, object param, Action<T, M> join, IDbTransaction tr = null);
  ```
 
+ ------
+ (C)2022 Ramón Ordiales Plaza
