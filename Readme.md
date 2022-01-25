@@ -77,7 +77,6 @@ IEnumerable<(dynamic id, T value)> QueryIdValue<TA, T>(this IDbConnection conn, 
 IEnumerable<(dynamic id, A valueA, B valueB)> QueryIdValue<TA, A, B>(this IDbConnection conn, string fieldA, string fieldB, string where, object param, IDbTransaction tr = null);
 IEnumerable<(dynamic id, T value)> GetIdValues<TA, T>(this IDbConnection conn, IEnumerable ids, string field, IDbTransaction tr = null);
 IEnumerable<(dynamic id, A valueA, B valueB)> GetIdValues<TA, A, B>(this IDbConnection conn, IEnumerable ids, string fieldA, string fieldB, IDbTransaction tr = null);
-Task<List<T>> IntGetSomeAsync<T>(this IDbConnection conn, string lst, IDbTransaction tr = null,int? timeout=null) where T : class;
 Task<List<T>> GetSomeAsync<T>(this IDbConnection conn, IEnumerable<string> ids, IDbTransaction tr = null,int? timeout=null) where T : class;
 Task<List<T>> GetSomeAsync<T>(this IDbConnection conn, IEnumerable<int> ids, IDbTransaction tr = null,int? timeout=null) where T : class;
 Task<List<T>> GetSomeDynAsync<T>(this IDbConnection conn, IEnumerable ids, IDbTransaction tr = null,int? timeout=null) where T : class;
@@ -96,7 +95,7 @@ int InsertOrUpdateAutoKey<T>(this IDbConnection conn, T item, IDbTransaction tr 
 void InsertOrUpdate<T>(this IDbConnection conn, T item, IDbTransaction tr = null) where T : class;
 int UpdateIdValues<TA, T>(this IDbConnection conn, IEnumerable<(dynamic id, T value)> values, string field, IDbTransaction tr = null);
 bool UpdateIdValue<TA, T>(this IDbConnection conn, (dynamic id, T value) value, string field, IDbTransaction tr = null);
-Task<int> InsertOrUpdateAutoKeyAsync<T>(this IDbConnection conn, T item, IDbTransaction tr = null,int? timeout=0) where T : class;
+Task<int> InsertOrUpdateAutoKeyAsync<T>(this IDbConnection conn, T item, IDbTransaction tr = null,int? timeout=null) where T : class;
 Task InsertOrUpdateAsync<T>(this IDbConnection conn, T item, IDbTransaction tr = null,int? timeout=0) where T : class;
 Task<int> UpdateIdValuesAsync<TA, T>(this IDbConnection conn, IEnumerable<(dynamic id, T value)> values, string field, IDbTransaction tr = null,int? timeout=null);
 Task<bool> UpdateIdValueAsync<TA, T>(this IDbConnection conn, (dynamic id, T value) value, string field, IDbTransaction tr = null,int? timeout=null);
