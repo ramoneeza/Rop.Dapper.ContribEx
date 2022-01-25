@@ -64,7 +64,7 @@ namespace Rop.Dapper.ContribEx
                 var q = conn.Query<dynamic>(sql, null, tr).ToList();
                 foreach (var qq in q)
                 {
-                    yield return (qq.Id, qq.Value);
+                    yield return (qq.Id, (T)qq.Value);
                 }
             }
         }
