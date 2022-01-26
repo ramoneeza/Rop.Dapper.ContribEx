@@ -53,18 +53,45 @@ namespace Rop.Dapper.ContribEx
             var q = conn.Query<dynamic>(sql, param, tr);
             return q.Select(qq => (qq.Id, (A)qq.ValueA, (B)qq.ValueB));
         }
-        public static IEnumerable<(dynamic id, T value)> GetIdValues<TA, T>(this IDbConnection conn, IEnumerable ids, string field, IDbTransaction tr = null)
+
+        private class idvalue<T>
+        {
+            public string Id { get; set; }
+            public T Value { get; set; }
+        }
+        private class intidvalue<T>
+        {
+            public int Id { get; set; }
+            public T Value { get; set; }
+        }
+
+        public static IEnumerable<(int id, T value)> GetIdValues<TA, T>(this IDbConnection conn, IEnumerable<int> ids, string field, IDbTransaction tr = null)
         {
 
-            var lstids = DapperHelperExtend.GetIdListDyn(ids);
+            var lstids = DapperHelperExtend.GetIdList(ids);
             if (lstids != "")
             {
                 var kd = DapperHelperExtend.GetKeyDescription(typeof(TA));
                 var sql = $"SELECT {kd.KeyName} as Id, {field} as Value FROM {kd.TableName} WHERE {kd.KeyName} IN ({lstids})";
-                var q = conn.Query<dynamic>(sql, null, tr).ToList();
+                var q = conn.Query<intidvalue<T>>(sql, null, tr).ToList();
                 foreach (var qq in q)
                 {
-                    yield return (qq.Id, (T)qq.Value);
+                    yield return (qq.Id, qq.Value);
+                }
+            }
+        }
+        public static IEnumerable<(string id, T value)> GetIdValues<TA, T>(this IDbConnection conn, IEnumerable<string> ids, string field, IDbTransaction tr = null)
+        {
+
+            var lstids = DapperHelperExtend.GetIdList(ids);
+            if (lstids != "")
+            {
+                var kd = DapperHelperExtend.GetKeyDescription(typeof(TA));
+                var sql = $"SELECT {kd.KeyName} as Id, {field} as Value FROM {kd.TableName} WHERE {kd.KeyName} IN ({lstids})";
+                var q = conn.Query<idvalue<T>>(sql, null, tr).ToList();
+                foreach (var qq in q)
+                {
+                    yield return (qq.Id, qq.Value);
                 }
             }
         }
