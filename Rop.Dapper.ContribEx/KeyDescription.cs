@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Rop.Dapper.ContribEx
@@ -13,6 +14,12 @@ namespace Rop.Dapper.ContribEx
         public bool IsAutoKey { get; }
         public PropertyInfo KeyProp { get; }
         public bool KeyTypeIsString { get; }
+        public bool IsForeignTable { get; }
+        public string ForeignDatabaseName { get; }
+        public string GetUse()
+        {
+            return (IsForeignTable) ? $"USE {ForeignDatabaseName}; " : "";
+        }
         internal KeyDescription(string tableName, string keyName, bool isAutoKey, PropertyInfo keyProp)
         {
             TableName = tableName;
@@ -20,6 +27,15 @@ namespace Rop.Dapper.ContribEx
             IsAutoKey = isAutoKey;
             KeyProp = keyProp;
             KeyTypeIsString = Type.GetTypeCode(KeyProp.PropertyType) == TypeCode.String;
+            IsForeignTable = IsAForeignTable(tableName,out var fdbn);
+            ForeignDatabaseName = fdbn;
+        }
+        public static bool IsAForeignTable(string tablename, out string foreigndatabase)
+        {
+            foreigndatabase = "";
+            var res = tablename.Count(c => c == '.') >= 2;
+            foreigndatabase = (res) ? tablename.Split('.').FirstOrDefault() : "";
+            return res;
         }
     }
 }
