@@ -31,6 +31,7 @@ The full list of helpers for class/table/key information are:
 ```csharp
 (PropertyInfo propkey, bool isautokey) GetSingleKey(Type t);
 KeyDescription GetKeyDescription(Type t);
+KeyDescription GetKeyDescription<T>();
 object GetKeyValue<T>(T item);
 SetKeyValue<T>(T item, object value);
 (KeyDescription keydescription, object value) GetKeyDescriptionAndValue<T>(T item);

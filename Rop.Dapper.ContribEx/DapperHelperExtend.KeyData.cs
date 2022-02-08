@@ -45,6 +45,12 @@ namespace Rop.Dapper.ContribEx
             KeyDescriptions[t.TypeHandle]= kd;
             return kd;
         }
+
+        public static KeyDescription GetKeyDescription<T>() where T:class
+        {
+            return GetKeyDescription(typeof(T));
+        }
+
         /// <summary>
         /// Get Key Value for item
         /// </summary>
