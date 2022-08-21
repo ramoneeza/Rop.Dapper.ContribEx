@@ -96,18 +96,53 @@ namespace Rop.Dapper.ContribEx
         /// </summary>
         /// <param name="type"></param>
         /// <returns>Sql String</returns>
-        public static string GetDeleteByKeyCache(Type type)
+        public static string DeleteByKeyCache(Type type)
         {
-            if (!DeleteByKeyCache.TryGetValue(type.TypeHandle, out string sql))
+            if (!DeleteByKeyDic.TryGetValue(type.TypeHandle, out string sql))
             {
                 var (key, _) = GetSingleKey(type);
                 var name = GetTableName(type);
                 sql = $"DELETE FROM {name} WHERE {key.Name} = @id";
-                DeleteByKeyCache[type.TypeHandle] = sql;
+                DeleteByKeyDic[type.TypeHandle] = sql;
             }
             return sql;
         }
-        
+        public static string GetForeignDatabaseName(Type type)
+        {
+            if (ForeignDatabase.TryGetValue(type.TypeHandle, out string name)) return name;
+            var foreigndatabaseAttrName = type.GetCustomAttribute<ForeignDatabaseAttribute>(false)?.Name
+                                          ?? (type.GetCustomAttributes(false).FirstOrDefault(attr => attr.GetType().Name == nameof(ForeignDatabaseAttribute)) as dynamic)?.Name;
+
+            if (foreigndatabaseAttrName != null) name = foreigndatabaseAttrName;
+            ForeignDatabase[type.TypeHandle] = name;
+            return name;
+        }
+        public static string SelectGetAllSlimCache(Type type)
+        {
+            if (SelectSlimDic.TryGetValue(type.TypeHandle, out string partialSelect)) return partialSelect;
+
+            var name = GetTableName(type);
+            var allProperties = TypePropertiesCache(type);
+            var proplst = string.Join(", ", allProperties.Select(p => p.Name));
+            partialSelect = $"select {proplst} from {name}";
+            SelectSlimDic[type.TypeHandle] = partialSelect;
+            return partialSelect;
+        }
+
+        public static string SelectGetSlimCache(Type type)
+        {
+            if (GetSlimDic.TryGetValue(type.TypeHandle, out var queryslim)) return queryslim;
+            var select = SelectGetAllSlimCache(type);
+            var (key, _) = GetSingleKey(type);
+            queryslim = $"{select} where {key.Name} = @id";
+            GetSlimDic[type.TypeHandle] = queryslim;
+            return queryslim;
+        }
+
+
+
+
+
         /// <summary>
         /// Get Expression's member name
         /// </summary>

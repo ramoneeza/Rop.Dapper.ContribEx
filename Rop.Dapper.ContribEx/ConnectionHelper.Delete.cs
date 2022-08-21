@@ -8,7 +8,7 @@ namespace Rop.Dapper.ContribEx
     {
         public static bool DeleteByKey<T>(this IDbConnection conn, dynamic id, IDbTransaction tr = null, int? commandTimeout = null)
         {
-            var sql = DapperHelperExtend.GetDeleteByKeyCache(typeof(T));
+            var sql = DapperHelperExtend.DeleteByKeyCache(typeof(T));
             var dynParams = new DynamicParameters();
             dynParams.Add("@id", id);
             var n = conn.Execute(sql, dynParams, tr, commandTimeout);
@@ -23,7 +23,7 @@ namespace Rop.Dapper.ContribEx
         // Async 
         public static async Task<bool> DeleteByKeyAsync<T>(this IDbConnection conn, dynamic id, IDbTransaction tr = null, int? commandTimeout = null)
         {
-            var sql = DapperHelperExtend.GetDeleteByKeyCache(typeof(T));
+            var sql = DapperHelperExtend.DeleteByKeyCache(typeof(T));
             var dynParams = new DynamicParameters();
             dynParams.Add("@id", id);
             var n = await conn.ExecuteAsync(sql, dynParams, tr, commandTimeout);

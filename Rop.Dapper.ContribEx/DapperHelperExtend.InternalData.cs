@@ -35,9 +35,9 @@ namespace Rop.Dapper.ContribEx
         private static ConcurrentDictionary<RuntimeTypeHandle, string> GetQueries => (ConcurrentDictionary<RuntimeTypeHandle,string>)GetQueriesInfo.GetValue(null);
 
         private static ConcurrentDictionary<RuntimeTypeHandle, string> ForeignDatabase = new ConcurrentDictionary<RuntimeTypeHandle, string>();
-        private static ConcurrentDictionary<RuntimeTypeHandle, string> PartialSelect = new ConcurrentDictionary<RuntimeTypeHandle, string>();
-        private static ConcurrentDictionary<RuntimeTypeHandle, string> QueriesSlim = new ConcurrentDictionary<RuntimeTypeHandle, string>();
-        private static ConcurrentDictionary<RuntimeTypeHandle, string> DeleteByKeyCache = new ConcurrentDictionary<RuntimeTypeHandle, string>();
+        private static ConcurrentDictionary<RuntimeTypeHandle, string> SelectSlimDic = new ConcurrentDictionary<RuntimeTypeHandle, string>();
+        private static ConcurrentDictionary<RuntimeTypeHandle, string> GetSlimDic = new ConcurrentDictionary<RuntimeTypeHandle, string>();
+        private static ConcurrentDictionary<RuntimeTypeHandle, string> DeleteByKeyDic = new ConcurrentDictionary<RuntimeTypeHandle, string>();
         
         static DapperHelperExtend()
         {
@@ -51,37 +51,7 @@ namespace Rop.Dapper.ContribEx
             MethodInfo GetInfo(string name) => typeof(SqlMapperExtensions).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static) ?? throw new InvalidOperationException($"Invalid method {name} in static constructor");
         }
         
-        public static string GetForeignDatabaseName(Type type)
-        {
-            if (ForeignDatabase.TryGetValue(type.TypeHandle, out string name)) return name;
-            var foreigndatabaseAttrName = type.GetCustomAttribute<ForeignDatabaseAttribute>(false)?.Name
-                                ?? (type.GetCustomAttributes(false).FirstOrDefault(attr => attr.GetType().Name == nameof(ForeignDatabaseAttribute)) as dynamic)?.Name;
-
-            if (foreigndatabaseAttrName != null) name = foreigndatabaseAttrName;
-            ForeignDatabase[type.TypeHandle] = name;
-            return name;
-        }
-        public static string GetPartialSelect(Type type)
-        {
-            if (PartialSelect.TryGetValue(type.TypeHandle, out string partialSelect)) return partialSelect;
-            
-            var name = GetTableName(type);
-            var allProperties = TypePropertiesCache(type);
-            var proplst = string.Join(", ", allProperties.Select(p => p.Name));
-            partialSelect = $"select {proplst} from {name}";
-            PartialSelect[type.TypeHandle] = partialSelect;
-            return partialSelect;
-        }
-
-        public static string GetQueriesSlim(Type type)
-        {
-            if (QueriesSlim.TryGetValue(type.TypeHandle, out var queryslim)) return queryslim;
-            var select = GetPartialSelect(type);
-            var (key,_) = GetSingleKey(type);
-            queryslim = $"{select} where {key.Name} = @id";
-            GetQueries[type.TypeHandle] = queryslim;
-            return queryslim;
-        }
+        
 
     }
 }

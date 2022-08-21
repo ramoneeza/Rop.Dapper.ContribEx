@@ -112,7 +112,7 @@ namespace xUnit.Rop.Dapper.ContribEx
         [Fact]
         public void GetDeleteByKeyCacheTest()
         {
-            var select = DapperHelperExtend.GetDeleteByKeyCache(typeof(Car));
+            var select = DapperHelperExtend.DeleteByKeyCache(typeof(Car));
             Assert.Equal("DELETE FROM Automobiles WHERE Id = @id",select);
         }
         // Class / Table / Key info
