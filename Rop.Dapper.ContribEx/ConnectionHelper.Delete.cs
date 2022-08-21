@@ -6,44 +6,33 @@ namespace Rop.Dapper.ContribEx
 {
     public static partial class ConnectionHelper
     {
-        public static bool DeleteByKey<T>(this IDbConnection conn, object id, IDbTransaction tr = null)
+        public static bool DeleteByKey<T>(this IDbConnection conn, dynamic id, IDbTransaction tr = null, int? commandTimeout = null)
         {
             var sql = DapperHelperExtend.GetDeleteByKeyCache(typeof(T));
             var dynParams = new DynamicParameters();
             dynParams.Add("@id", id);
-            var n = conn.Execute(sql, dynParams, tr);
+            var n = conn.Execute(sql, dynParams, tr, commandTimeout);
             return n > 0;
         }
 
-        public static bool Delete<T>(this IDbConnection conn, IDbTransaction tr, int key)
+        public static bool Delete<T>(this IDbConnection conn, IDbTransaction tr, dynamic key, int? commandTimeout = null)
         {
-            return DeleteByKey<T>(conn, key, tr);
-        }
-        public static bool Delete<T>(this IDbConnection conn, IDbTransaction tr, string key)
-        {
-            return DeleteByKey<T>(conn, key, tr);
+            return DeleteByKey<T>(conn, key, tr, commandTimeout);
         }
 
         // Async 
-
-        public static async Task<bool> DeleteByKeyAsync<T>(this IDbConnection conn, object id, IDbTransaction tr = null, int? commandTimeout = null)
+        public static async Task<bool> DeleteByKeyAsync<T>(this IDbConnection conn, dynamic id, IDbTransaction tr = null, int? commandTimeout = null)
         {
             var sql = DapperHelperExtend.GetDeleteByKeyCache(typeof(T));
             var dynParams = new DynamicParameters();
             dynParams.Add("@id", id);
-            var n = await conn.ExecuteAsync(sql, dynParams, tr,commandTimeout);
+            var n = await conn.ExecuteAsync(sql, dynParams, tr, commandTimeout);
             return n > 0;
         }
 
-        public static async Task<bool> DeleteAsync<T>(this IDbConnection conn, IDbTransaction tr, int key,int? commandTimeout=null)
+        public static Task<bool> DeleteAsync<T>(this IDbConnection conn, IDbTransaction tr, dynamic id, int? commandTimeout = null)
         {
-            return await DeleteByKeyAsync<T>(conn, key, tr,commandTimeout);
+            return DeleteByKeyAsync<T>(conn, id, tr, commandTimeout);
         }
-        public static async Task<bool> DeleteAsync<T>(this IDbConnection conn, IDbTransaction tr, string key,int? commandTimeout=null)
-        {
-            return await DeleteByKeyAsync<T>(conn, key, tr,commandTimeout);
-        }
-
-
     }
 }

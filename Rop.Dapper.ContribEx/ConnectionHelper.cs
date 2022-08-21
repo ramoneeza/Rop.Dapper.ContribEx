@@ -17,13 +17,14 @@ namespace Rop.Dapper.ContribEx
         // ==============================
         //
         // ConnectionHelper.Delete -> Extends Delete command
+        // ConnectionHelper.GetSlim -> Extends Get command with fine tuned select
         // ConnectionHelper.GetSome -> Extends Get command
         // ConnectionHelper.InsertOrUpdate -> Extends Insert and Update commands
         // ConnectionHelper.Join -> Join and other complex commands
-        
 
-        
-        
+
+
+
 
     }
 }

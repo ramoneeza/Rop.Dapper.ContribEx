@@ -41,7 +41,8 @@ namespace Rop.Dapper.ContribEx
             var (propkey, isautokey) = GetSingleKey(t);
             var keyname = propkey.Name;
             var tname = GetTableName(t);
-            kd = new KeyDescription(tname, keyname, isautokey, propkey);
+            var fdb = GetForeignDatabaseName(t);
+            kd = fdb is null ? new KeyDescription(tname, keyname, isautokey, propkey) : new KeyDescription(fdb,tname, keyname, isautokey, propkey);
             KeyDescriptions[t.TypeHandle]= kd;
             return kd;
         }

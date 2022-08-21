@@ -124,9 +124,9 @@ namespace xUnit.Rop.Dapper.ContribEx
                 _insertObjectX(conn);
                 using (var tr = conn.BeginTransaction())
                 {
-                    var r1 = conn.Delete<Car>(tr, 1);
+                    var r1 = conn.DeleteByKey<Car>(1,tr);
                     Assert.True(r1);
-                    var r2 = conn.Delete<ObjectX>(tr, "MyKey");
+                    var r2 = conn.DeleteByKey<ObjectX>("MyKey",tr);
                     Assert.True(r2);
                     tr.Commit();
                 }
@@ -134,9 +134,9 @@ namespace xUnit.Rop.Dapper.ContribEx
                 using (var tr2 = conn.BeginTransaction())
                 {
                     // Already deleted
-                    var r1 = conn.Delete<Car>(tr2, 1);
+                    var r1 = conn.DeleteByKey<Car>(1,tr2);
                     Assert.False(r1);
-                    var r2 = conn.Delete<ObjectX>(tr2, "MyKey");
+                    var r2 = conn.DeleteByKey<ObjectX>("MyKey",tr2);
                     Assert.False(r2);
                     tr2.Commit();
                 }
@@ -234,14 +234,14 @@ namespace xUnit.Rop.Dapper.ContribEx
                
 
                     conn.Execute("DELETE FROM users");
-                    var k1 = conn.InsertOrUpdateAutoKey(c1);
+                    var k1 = conn.InsertOrUpdate(c1);
                     DapperHelperExtend.SetKeyValue(c1, k1);
                     var cr1 = conn.Get<User>(k1);
                     Assert.Equal(c1.Id, cr1.Id);
                     Assert.Equal(c1.Name, cr1.Name);
                     Assert.Equal(c1.Age, cr1.Age);
                     DapperHelperExtend.SetKeyValue(c2, k1);
-                    conn.InsertOrUpdateAutoKey(c2);
+                    conn.InsertOrUpdate(c2);
                     
                     var cr2 = conn.Get<User>(1);
                     Assert.Equal(c2.Id, cr2.Id);

@@ -30,6 +30,17 @@ namespace Rop.Dapper.ContribEx
             IsForeignTable = IsAForeignTable(tableName,out var fdbn);
             ForeignDatabaseName = fdbn;
         }
+        internal KeyDescription(string foreignDatabase, string tableName, string keyName, bool isAutoKey, PropertyInfo keyProp)
+        {
+            TableName = tableName;
+            KeyName = keyName;
+            IsAutoKey = isAutoKey;
+            KeyProp = keyProp;
+            KeyTypeIsString = Type.GetTypeCode(KeyProp.PropertyType) == TypeCode.String;
+            IsForeignTable = true;
+            ForeignDatabaseName = foreignDatabase;
+        }
+
         public static bool IsAForeignTable(string tablename, out string foreigndatabase)
         {
             foreigndatabase = "";
