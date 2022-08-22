@@ -112,8 +112,19 @@ namespace Rop.Dapper.ContribEx
             if (ForeignDatabase.TryGetValue(type.TypeHandle, out string name)) return name;
             var foreigndatabaseAttrName = type.GetCustomAttribute<ForeignDatabaseAttribute>(false)?.Name
                                           ?? (type.GetCustomAttributes(false).FirstOrDefault(attr => attr.GetType().Name == nameof(ForeignDatabaseAttribute)) as dynamic)?.Name;
-
-            if (foreigndatabaseAttrName != null) name = foreigndatabaseAttrName;
+            if (foreigndatabaseAttrName == null)
+            {
+                var tname = GetTableName(type)??"";
+                var sp = tname.Split('.');
+                if (sp.Length == 3)
+                {
+                    name = sp[0];
+                }
+            }
+            else
+            {
+                name = foreigndatabaseAttrName;
+            }
             ForeignDatabase[type.TypeHandle] = name;
             return name;
         }

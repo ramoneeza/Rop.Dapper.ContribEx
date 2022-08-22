@@ -204,5 +204,20 @@ namespace xUnit.Rop.Dapper.ContribEx
             Assert.Equal("'A','B'",lst3);
             Assert.Equal("1,2",lst4);
         }
+        // ExternalDatabase tests
+        [Fact]
+        public void GetExternalDatabaseName()
+        {
+            var name1 = DapperHelperExtend.GetForeignDatabaseName(typeof(ExtWithAttTable));
+            var name2 = DapperHelperExtend.GetForeignDatabaseName(typeof(ExtWithAttTable2));
+            var name3 = DapperHelperExtend.GetForeignDatabaseName(typeof(ExtWithKey1));
+            var name4 = DapperHelperExtend.GetForeignDatabaseName(typeof(ExtWithKey2));
+            var desired = "Intranet";
+            Assert.Equal(desired,name1);
+            Assert.Equal(desired,name2);
+            Assert.Equal(desired,name3);
+            Assert.Equal(desired,name4);
+        }
+
     }
 }
