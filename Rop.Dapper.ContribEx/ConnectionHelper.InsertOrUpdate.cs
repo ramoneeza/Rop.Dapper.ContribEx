@@ -39,10 +39,10 @@ namespace Rop.Dapper.ContribEx
                 }
                 else
                 {
-                    i = 0;
+                    i = 1;
                     var res = conn.Update(item, tr, timeout);
-                    if (!res) i = (int) conn.Insert(item, tr, timeout);
-                    return i;
+                    if (!res) conn.Insert(item, tr, timeout);
+                    return i; // i=1 == sucessful 
                 }
             }
         }
